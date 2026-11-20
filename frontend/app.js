@@ -4,7 +4,7 @@
 
   // ---- Configuración --------------------------------------------------------
   const CONFIG = {
-    displayName: "Latino Kukuli Salamanca",
+    displayName: "Latino Kukuli Benjamín",
     teamMatch: "latino kukuli",      // texto que identifica a nuestro equipo en los datos
     localCrest: "img/escudo.jpg",
     api: "api/data",            // con servidor propio (python backend/server.py)
@@ -98,6 +98,15 @@
     return f > c ? "W" : f === c ? "D" : "L";
   }
 
+  // Hora de estar en el campo: una hora antes del comienzo
+  const ARRIVE_MINUTES = 60;
+  function arrivalTime(t) {
+    const mt = /^(\d{1,2}):(\d{2})/.exec(t || "");
+    if (!mt) return null;
+    const mins = (+mt[1] * 60 + +mt[2] - ARRIVE_MINUTES + 1440) % 1440;
+    return String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+  }
+
   function matchHTML(m) {
     const ours = isUs(m.home) || isUs(m.away);
     const hw = played(m) && m.home_goals > m.away_goals;
@@ -119,6 +128,7 @@
     if (v) meta.push(`📍 ${esc(v.name)}${v.confirmed ? "" : " <em>(campo habitual, por confirmar)</em>"}`);
     const maps = v && !played(m) && !retiredMatch ? `<div class="match__actions">${mapsButton(v)}</div>` : "";
     if (retiredMatch) meta.push(`<span class="retired">Equipo retirado</span>`);
+    const arrive = ours && !played(m) && !retiredMatch ? arrivalTime(m.time) : null;
 
     return `<div class="match${ours ? " is-ours" : ""}">
       <div class="match__row">
@@ -126,6 +136,7 @@
         ${center}
         <div class="match__team${isUs(m.away) ? " is-us" : ""}${aw ? " is-winner" : ""}">${crestHTML(m.away, m.away_crest)}<span>${esc(m.away)}</span></div>
       </div>
+      ${arrive ? `<div class="match__arrive"><span>⏰ Estar en el campo: <strong>${arrive} h</strong></span></div>` : ""}
       ${meta.length ? `<div class="match__meta">${meta.join(" · ")}</div>` : ""}
       ${maps}
     </div>`;
@@ -141,7 +152,7 @@
   // ---- Secciones ------------------------------------------------------------
   function renderHeader(d) {
     $("#club-name").textContent = CONFIG.displayName;
-    $("#club-meta").textContent = [d.competition, d.group, d.season && `Temporada ${d.season}`].filter(Boolean).join(" · ");
+    $("#club-meta").textContent = ["Salamanca", d.competition, d.group, d.season && `Temporada ${d.season}`].filter(Boolean).join(" · ");
 
     const ourMatches = d.jornadas.flatMap((j) => j.matches.filter((m) => isUs(m.home) || isUs(m.away)));
     const next = ourMatches
@@ -164,6 +175,7 @@
         <div class="next__info">
           <span class="pill">${home ? "En casa" : "Fuera"}</span>
           <span class="next__when">${esc(fmtDate(next.date, { weekday: "long", day: "numeric", month: "long" }))}${next.time ? " · " + esc(next.time) + " h" : ""}</span>
+          ${arrivalTime(next.time) ? `<span class="next__arrive">⏰ Estar en el campo: <strong>${arrivalTime(next.time)} h</strong></span>` : ""}
           ${relDay(next.date) ? `<span>${relDay(next.date)}</span>` : ""}
           <span>${nv ? `📍 ${esc(nv.name)}${nv.confirmed ? "" : " (habitual, por confirmar)"}` : "📍 Campo por confirmar"}</span>
         </div>
@@ -457,7 +469,9 @@
   }));
   $("#refresh-btn").addEventListener("click", refresh);
 
-  const savedTab = readPref("tab", "partidos");
+  // Enlace directo a una sección: .../#clasificacion, .../#noticias…
+  const hashTab = location.hash.slice(1);
+  const savedTab = document.querySelector(`.tab[data-tab="${hashTab}"]`) ? hashTab : readPref("tab", "partidos");
   document.querySelector(`.tab[data-tab="${savedTab}"]`)?.click();
 
   // Pinta al instante los datos de ejemplo y luego intenta los reales

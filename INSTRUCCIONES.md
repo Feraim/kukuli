@@ -27,6 +27,24 @@ la federación pueda contactar en vez de bloquear.
 > GitHub desactiva las tareas programadas si un repositorio pasa 60 días sin actividad.
 > Si un día deja de actualizarse, entra en *Actions* y vuelve a activarla.
 
+## Aparecer en Google ("latino kukuli benjamín", "kukuli benjamín")
+
+La web ya lleva todo lo que Google usa para entenderla: título y descripción con esas
+palabras, datos estructurados del equipo, texto en la página, `sitemap.xml` y `robots.txt`
+(estos dos y la dirección canónica se generan solos al publicar, con la dirección real).
+
+Para que Google la encuentre antes (sin esto puede tardar semanas):
+1. Entra en **search.google.com/search-console** con tu cuenta de Google → **Añadir propiedad**
+   → tipo **Prefijo de la URL** → pega la dirección de la web (`https://TU-USUARIO.github.io/kukuli/`).
+2. Método **Etiqueta HTML**: copia solo el código de `content="…"`.
+3. En GitHub: *Settings → Secrets and variables → Actions → Variables* → **New repository variable**:
+   nombre `GOOGLE_VERIFICATION`, valor el código. Luego *Actions → Run workflow*.
+4. Vuelve a Search Console y pulsa **Verificar**. Después, en **Sitemaps**, envía `sitemap.xml`,
+   y en **Inspección de URLs** pega la dirección y pulsa **Solicitar indexación**.
+
+Lo que más ayuda a salir el primero: **enlaces a la web** desde el Instagram/Facebook del club
+(en la biografía), grupos de familias y la web de la federación o del club si la tiene.
+
 ## Arrancar en tu ordenador
 
 Solo hace falta **Python 3.9+** (no hay que instalar nada con pip):
@@ -46,6 +64,7 @@ datos de ejemplo de `frontend/mock-data.js`.
 backend/scraper.py   Scraper de la RFCYLF (librería estándar de Python)
 backend/server.py    Servidor: sirve la web + API /api/data y /api/refresh con caché
 data/cache.json      Últimos datos descargados (se reescribe en cada actualización)
+backend/seo.py       Prepara la web para Google al publicar (sitemap, robots, canónica)
 frontend/            Web (index.html, styles.css, app.js, mock-data.js, img/)
 ```
 

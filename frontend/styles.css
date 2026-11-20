@@ -284,3 +284,14 @@ button { font: inherit; cursor: pointer; }
   .club__name { font-size: 1.9rem; }
   .container { padding: 20px 24px; }
 }
+
+/* ---------- Hora de llegada al campo ---------- */
+.match__arrive { display: flex; justify-content: center; margin-top: 6px; }
+.match__arrive span {
+  font-size: .8rem; padding: 3px 10px; border-radius: 999px;
+  background: var(--surface); border: 1px solid color-mix(in srgb, var(--color-primary) 45%, var(--border));
+}
+.match__arrive strong { color: var(--color-primary-dark); }
+.next__arrive strong { color: #fff; }
+
+.footer__about { max-width: 620px; margin: 0 auto 14px !important; font-size: .82rem; line-height: 1.5; }

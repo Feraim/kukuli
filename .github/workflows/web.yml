@@ -30,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # siempre lo último
 
       - uses: actions/setup-python@v5
         with:
@@ -52,16 +54,23 @@ jobs:
             echo "Sin cambios en los datos"
           else
             git commit -m "Actualizar datos de la federación"
+            git pull --rebase   # por si se ha subido algún cambio mientras tanto
             git push
           fi
 
+      - id: pages
+        uses: actions/configure-pages@v5
+
       - name: Preparar la web
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+          GOOGLE_VERIFICATION: ${{ vars.GOOGLE_VERIFICATION }}
         run: |
           mkdir -p _site
           cp -r frontend/. _site/
           cp data/cache.json _site/data.json
+          python backend/seo.py _site "$SITE_URL/" "$GOOGLE_VERIFICATION"
 
-      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

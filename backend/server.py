@@ -46,7 +46,6 @@ _lock = threading.Lock()
 _state = {"refreshing": False, "last_attempt": 0.0, "error": None, "error_at": None,
           "blocked_until": 0.0, "blocks_in_a_row": 0}
 
-
 def load_cache() -> dict | None:
     try:
         return json.loads(CACHE_FILE.read_text(encoding="utf-8"))
@@ -150,8 +149,14 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(self._payload({"refresh": status}))
         self.send_error(404)
 
+    def end_headers(self):
+        # data.json cambia con cada actualización: que el navegador no lo guarde viejo
+        if self.path.split("?")[0].endswith(".json"):
+            self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+
     def log_message(self, fmt, *args):
-        if "/api/" in (args[0] if args else ""):
+        if "/api/" in str(args[0] if args else ""):
             super().log_message(fmt, *args)
 
 
