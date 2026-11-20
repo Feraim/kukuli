@@ -1,0 +1,77 @@
+# Actualiza los datos desde la RFCYLF y publica la web en GitHub Pages.
+#
+# - Programado: domingo 21:00, lunes 12:00, miércoles 20:00 y viernes 20:00 (hora de invierno en España).
+#   (GitHub usa hora UTC: en invierno España = UTC+1, en verano UTC+2.)
+# - Manual: pestaña "Actions" -> "Actualizar y publicar web" -> "Run workflow".
+# - Al subir cambios (push): solo se vuelve a publicar la web, sin llamar a la federación.
+name: Actualizar y publicar web
+
+on:
+  schedule:
+    - cron: "0 20 * * 0"
+    - cron: "0 11 * * 1"
+    - cron: "0 19 * * 3"
+    - cron: "0 19 * * 5"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: web
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Descargar datos de la federación
+        if: github.event_name != 'push'
+        continue-on-error: true   # si la federación falla o bloquea, se publican los últimos datos guardados
+        env:
+          CONTACTO: ${{ vars.CONTACTO }}
+        run: python backend/scraper.py data/cache.json
+
+      - name: Guardar datos nuevos en el repositorio
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cache.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios en los datos"
+          else
+            git commit -m "Actualizar datos de la federación"
+            git push
+          fi
+
+      - name: Preparar la web
+        run: |
+          mkdir -p _site
+          cp -r frontend/. _site/
+          cp data/cache.json _site/data.json
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Latino Kukuli Salamanca</title>
+  <meta name="description" content="Clasificación, resultados y calendario del C.D. Latino Kukuli (fútbol base, Salamanca).">
+  <meta name="theme-color" content="#111111">
+  <link rel="icon" href="img/escudo.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="club">
+        <img class="club__crest" src="img/escudo.jpg" alt="Escudo del C.D. Latino Kukuli" width="72" height="72">
+        <div>
+          <h1 class="club__name" id="club-name">Latino Kukuli Salamanca</h1>
+          <p class="club__meta" id="club-meta">Fútbol base · Salamanca</p>
+        </div>
+      </div>
+
+      <section class="next" id="next-match" aria-live="polite">
+        <p class="next__label">Próximo partido</p>
+        <div class="next__body skeleton">Cargando…</div>
+      </section>
+
+      <dl class="stats" id="team-stats" hidden></dl>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab is-active" role="tab" aria-selected="true" aria-controls="panel-partidos" id="tab-partidos" data-tab="partidos">Partidos</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-clasificacion" id="tab-clasificacion" data-tab="clasificacion">Clasificación</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-plantilla" id="tab-plantilla" data-tab="plantilla">Plantilla</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-estadisticas" id="tab-estadisticas" data-tab="estadisticas">Estadísticas</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-noticias" id="tab-noticias" data-tab="noticias">Noticias</button>
+  </nav>
+
+  <main class="container">
+    <div class="notice" id="notice" hidden></div>
+
+    <section id="panel-partidos" role="tabpanel" aria-labelledby="tab-partidos" class="panel">
+      <div class="filter" role="group" aria-label="Filtrar partidos">
+        <button class="chip" data-filter="team">Solo Latino Kukuli</button>
+        <button class="chip" data-filter="all">Todos los partidos</button>
+      </div>
+      <h2 class="section-title">Próximos partidos</h2>
+      <div id="upcoming" class="jornadas"></div>
+      <h2 class="section-title">Resultados</h2>
+      <div id="results" class="jornadas"></div>
+    </section>
+
+    <section id="panel-clasificacion" role="tabpanel" aria-labelledby="tab-clasificacion" class="panel" hidden>
+      <h2 class="section-title" id="standings-title">Clasificación</h2>
+      <div class="table-wrap">
+        <table class="standings">
+          <thead>
+            <tr>
+              <th scope="col" class="num">#</th>
+              <th scope="col" class="team-col">Equipo</th>
+              <th scope="col" class="num" title="Puntos">Pts</th>
+              <th scope="col" class="num" title="Partidos jugados">PJ</th>
+              <th scope="col" class="num hide-xs" title="Ganados">G</th>
+              <th scope="col" class="num hide-xs" title="Empatados">E</th>
+              <th scope="col" class="num hide-xs" title="Perdidos">P</th>
+              <th scope="col" class="num" title="Diferencia de goles">DG</th>
+            </tr>
+          </thead>
+          <tbody id="standings-body"></tbody>
+        </table>
+      </div>
+      <p class="hint" id="standings-note"></p>
+    </section>
+    <section id="panel-plantilla" role="tabpanel" aria-labelledby="tab-plantilla" class="panel" hidden>
+      <h2 class="section-title">Plantilla</h2>
+      <div class="notice" id="players-notice" hidden>Nombres de ejemplo: edita <code>frontend/jugadores.js</code> para poner los jugadores reales.</div>
+      <ul class="players" id="players"></ul>
+    </section>
+    <section id="panel-estadisticas" role="tabpanel" aria-labelledby="tab-estadisticas" class="panel" hidden>
+      <div class="cheer" id="cheer"></div>
+      <h2 class="section-title">Lo que ya hemos conseguido</h2>
+      <div class="kpis" id="kpis"></div>
+      <h2 class="section-title">Nuestros goles por jornada</h2>
+      <figure class="goals-chart" id="goals-chart"></figure>
+      <p class="hint">Solo cuenta los partidos jugados. Las estadísticas se actualizan solas con cada resultado.</p>
+    </section>
+    <section id="panel-noticias" role="tabpanel" aria-labelledby="tab-noticias" class="panel" hidden>
+      <h2 class="section-title">Crónicas de la jornada</h2>
+      <div class="news" id="news-auto"></div>
+      <h2 class="section-title">En la prensa</h2>
+      <div class="news" id="news-press"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Datos: <a id="source-link" href="https://www.rfcylf.es/pnfg/NPcd/NFG_VisCompeticiones_Grupo?&cod_primaria=1000123&codequipo=22910498&codgrupo=24219190" target="_blank" rel="noopener">Real Federación de Castilla y León de Fútbol (RFCYLF)</a></p>
+    <p>Última actualización: <strong id="updated-at">—</strong></p>
+    <button class="btn" id="refresh-btn" type="button">Actualizar datos</button>
+  </footer>
+
+  <script src="jugadores.js"></script>
+  <script src="noticias.js"></script>
+  <script src="mock-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
