@@ -1334,8 +1334,8 @@
           "away": "C.D. Jai Alai-Bolívar \"C\"",
           "home_crest": "https://rfcylf.filesnovanet.es/pnfg/pimg/Clubes/00100_0074521386_CDSFF.png",
           "away_crest": "https://rfcylf.filesnovanet.es/pnfg/pimg/Clubes/00100_0074506447_mCxjgD4a_400x400_removebg_preview.png",
-          "date": "2026-11-28",
-          "time": "13:20",
+          "date": "2026-11-29",
+          "time": "09:00",
           "venue": "C.M. Vicente del Bosque de Salamanca 1.2",
           "venue_url": "https://www.rfcylf.es/pnfg/NPcd/NFG_VisCampos?cod_primaria=1000122&Codigo_Campo=3705"
         },
@@ -1874,5 +1874,5 @@
     }
   ],
   "source_url": "https://www.rfcylf.es/pnfg/NPcd/NFG_VisCompeticiones_Grupo?&cod_primaria=1000123&codequipo=22910498&codgrupo=24219190",
-  "updated_at": "2026-11-23T22:27:50+00:00"
+  "updated_at": "2026-11-26T02:01:07+00:00"
 }
