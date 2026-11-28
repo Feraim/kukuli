@@ -202,7 +202,8 @@
   ],
   "standings_source": "calculada",
   "standings_incomplete_jornadas": [
-    7
+    7,
+    10
   ],
   "pending": true,
   "jornadas": [
@@ -1374,7 +1375,7 @@
         {
           "home_goals": null,
           "away_goals": null,
-          "home_retired": false,
+          "home_retired": true,
           "away_retired": false,
           "home_id": "24216936",
           "home": "C.D. Doñinos \"B\"",
@@ -1874,5 +1875,5 @@
     }
   ],
   "source_url": "https://www.rfcylf.es/pnfg/NPcd/NFG_VisCompeticiones_Grupo?&cod_primaria=1000123&codequipo=22910498&codgrupo=24219190",
-  "updated_at": "2026-11-26T02:01:07+00:00"
+  "updated_at": "2026-11-28T01:48:53+00:00"
 }
